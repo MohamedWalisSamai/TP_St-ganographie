@@ -1,0 +1,22 @@
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+
+public class Main {
+
+	/**
+	 * @param args
+	 * @throws IOException 
+	 */
+	public static void main(String[] args) throws IOException {
+		Stegano stegano = new Stegano();
+		stegano.findImagesInImage("image1.png");
+		BufferedImage image  = ImageIO.read(new File("Image2.png"));
+		Stegano.hideImageInImage(image,"image1.png");
+
+	}
+
+}

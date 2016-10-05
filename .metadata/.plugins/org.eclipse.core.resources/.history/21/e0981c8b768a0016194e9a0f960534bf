@@ -1,0 +1,106 @@
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import java.awt.Color;
+
+public class Stegano {
+
+	public static void hideImageTextInImage(BufferedImage image, String fileName)
+			throws IOException {
+		BufferedImage im1 = null;
+
+		BufferedImage img = ImageIO.read(new File("image1.png"));
+		
+		int largeurImage = img.getWidth();
+		int hauteurImage = img.getHeight();
+		
+		int rgb = image.getRGB(largeurImage, hauteurImage);
+		
+		Color couleur = new Color(rgb);
+		int r = couleur.getRed();
+		int g = couleur.getGreen();
+		int b = couleur.getBlue();
+
+		im1 = new BufferedImage(largeurImage, hauteurImage, img.getType());
+		for (int i = 0; i < largeurImage; i++) {
+			for (int j = 0; j < hauteurImage; j++) {
+				if ( couleur == Color.WHITE)
+					r = (r >> 1) << 1;
+				else
+				{
+					r = r | 1;
+				}
+			}
+		}
+	}
+
+	public void findImagesInImage(String fileName) {
+		// crée un fichier avec file
+		// utiliser bufferimage
+		// passer d'un fichier a une image avec imajeI0.read
+		// par courrire l'image pixel par pixel
+		// gte r
+		// recupére les bites de pois faible
+		File file1 = new File(fileName);
+		BufferedImage image = null;
+
+		try {
+			image = ImageIO.read(file1);
+		} catch (IOException e) {
+			e.printStackTrace();
+
+		}
+		final int width = image.getWidth();
+		final int height = image.getHeight();
+		final int type = image.getType();
+		int color, r, g, b, red, green, blue;
+
+		BufferedImage resultat1 = new BufferedImage(width, height, type);
+		BufferedImage resultat2 = new BufferedImage(width, height, type);
+		BufferedImage resultat3 = new BufferedImage(width, height, type);
+
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				int rgb = image.getRGB(i, j);
+				Color couleur = new Color(rgb);
+				r = couleur.getRed();
+				g = couleur.getGreen();
+				b = couleur.getBlue();
+
+				red = r & 1;
+				green = g & 1;
+				blue = b & 1;
+
+				if (red == 1)
+					resultat1.setRGB(i, j, Color.BLACK.getRGB());
+				else
+					resultat1.setRGB(i, j, Color.WHITE.getRGB());
+
+				if (green == 1)
+					resultat2.setRGB(i, j, Color.BLACK.getRGB());
+				else
+					resultat2.setRGB(i, j, Color.WHITE.getRGB());
+
+				if (blue == 1)
+					resultat3.setRGB(i, j, Color.BLACK.getRGB());
+				else
+					resultat3.setRGB(i, j, Color.WHITE.getRGB());
+			}
+		}
+
+		try {
+
+			File outputfile1 = new File("resultat1.png");
+			File outputfile2 = new File("resultat2.png");
+			File outputfile3 = new File("resultat3.png");
+			ImageIO.write(resultat1, "png", outputfile1);
+			ImageIO.write(resultat2, "png", outputfile2);
+			ImageIO.write(resultat3, "png", outputfile3);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+}
